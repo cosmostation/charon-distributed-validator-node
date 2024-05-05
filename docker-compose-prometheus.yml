@@ -1,0 +1,12 @@
+services:
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:-v2.50.1}
+    user: ":"
+    networks: [dvnode]
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
+    command: 
+      - "--enable-feature=expand-external-labels"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+services:
+  vc:
+    container_name: vc-lodestar
+    image: chainsafe/lodestar:${LODESTAR_VERSION:-v1.17.0}
+    depends_on: [charon]
+    entrypoint: /opt/lodestar/run.sh
+    networks: [dvnode]
+    environment:
+      BEACON_NODE_ADDRESS: http://charon:3600
+      NETWORK: ${NETWORK:-holesky}
+      BUILDER_API_ENABLED: ${BUILDER_API_ENABLED:-false}
+    volumes:
+      - ./lodestar/run.sh:/opt/lodestar/run.sh
+      - ${PWD}/.charon/validator_keys:/home/charon/validator_keys
+      - ./data/lodestar:/opt/data
+    restart: unless-stopped
